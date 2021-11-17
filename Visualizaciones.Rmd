@@ -1,0 +1,41 @@
+---
+title: "Temperatura media en Vitoria en 2020"
+output: html_notebook
+---
+
+Ridgeline plots are partially overlapping line plots that create the impression of a mountain range. They can be quite useful for visualizing changes in distributions over time or space.
+
+This is an implementation of ggridges to show the distribution of the temperature in Vitoria, Spain during 2020.
+
+```{r}
+# Libraries
+library(tidyverse)
+library(hrbrthemes)
+library(viridis)
+library(dplyr)
+library(ggridges)
+```
+
+
+```{r}
+# Load dataset
+weather2020 <- read.csv2(file = 'temp_Vitoria_2020.csv')
+weather2020 <- weather2020[, c('fecha', 'tmed', 'mes')]
+weather2020$mes <- factor(weather2020$mes, levels = month.name)
+head(weather2020)
+```
+
+```{r}
+# Plotting
+
+ggplot(weather2020, aes(x = `tmed`, y = mes, fill = stat(x))) +
+  geom_density_ridges_gradient(scale = 3, rel_min_height = 0.01) +
+  scale_fill_viridis_c(name = "Temp. [C]", option = "C") +
+  labs(title = 'Temperatura media en Vitoria en 2020')+
+  xlab("Temperatura Media [ºC]") +
+  ylab("Month ")+
+  theme_minimal(base_size = 14) + 
+  theme(axis.text.y = element_text(vjust = 0))
+```
+
+
